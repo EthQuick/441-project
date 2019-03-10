@@ -2,9 +2,9 @@
 
 [ext_resource path="res://Objects/Player.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/Player/Player.png" type="Texture" id=2]
-[ext_resource path="res://Sprites/Player/Player_right.png" type="Texture" id=3]
-[ext_resource path="res://Sprites/Player/Player_fall.png" type="Texture" id=4]
-[ext_resource path="res://Sprites/Player/Player_jump.png" type="Texture" id=5]
+[ext_resource path="res://Sprites/Player/Player_fall.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/Player/Player_jump.png" type="Texture" id=4]
+[ext_resource path="res://Sprites/Player/Player_right.png" type="Texture" id=5]
 
 [sub_resource type="SpriteFrames" id=1]
 
@@ -16,17 +16,17 @@ animations = [ {
 }, {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
-"name": "Walk",
+"name": "Wall",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 4 ) ],
 "loop": true,
-"name": "Wall",
+"name": "Jump",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 5 ) ],
 "loop": true,
-"name": "Jump",
+"name": "Walk",
 "speed": 5.0
 } ]
 
@@ -35,7 +35,7 @@ animations = [ {
 custom_solver_bias = 0.0
 extents = Vector2( 20, 20 )
 
-[node name="Player" type="KinematicBody2D" index="0"]
+[node name="Player" type="KinematicBody2D"]
 
 position = Vector2( 32, 32 )
 input_pickable = false
@@ -47,7 +47,6 @@ _sections_unfolded = [ "Transform" ]
 __meta__ = {
 "_edit_group_": true
 }
-speed = 25
 
 [node name="Sprite" type="AnimatedSprite" parent="." index="0"]
 
@@ -62,6 +61,7 @@ __meta__ = {
 [node name="Body" type="CollisionShape2D" parent="." index="1"]
 
 shape = SubResource( 2 )
+_sections_unfolded = [ "Transform" ]
 __meta__ = {
 "_edit_group_": true
 }

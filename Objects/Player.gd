@@ -1,6 +1,5 @@
 extends KinematicBody2D
 
-export (int) var speed
 var wall = 0
 var velocity = Vector2()
 var ACCEL = 50
