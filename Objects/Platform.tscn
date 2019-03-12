@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Objects/Platform.gd" type="Script" id=1]
+[ext_resource path="res://Sprites/Wall/Wall_0.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/Wall/Wall_1.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/Wall/Wall_2.png" type="Texture" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 48, 16 )
+
+[node name="Platform" type="KinematicBody2D"]
+
+input_pickable = false
+collision_layer = 1
+collision_mask = 6
+collision/safe_margin = 0.08
+script = ExtResource( 1 )
+_sections_unfolded = [ "Collision" ]
+speed = 100
+direction = 1
+max_distance = 192
+
+[node name="Sprite" type="Sprite" parent="." index="0"]
+
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Sprite2" type="Sprite" parent="." index="1"]
+
+position = Vector2( 32, 0 )
+texture = ExtResource( 3 )
+centered = false
+
+[node name="Sprite3" type="Sprite" parent="." index="2"]
+
+position = Vector2( 64, 0 )
+texture = ExtResource( 4 )
+centered = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="3"]
+
+position = Vector2( 48, 16 )
+shape = SubResource( 1 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Dir_Timer" type="Timer" parent="." index="4"]
+
+process_mode = 1
+wait_time = 0.25
+one_shot = true
+autostart = false
+
+[connection signal="timeout" from="Dir_Timer" to="." method="_on_DirTimer_timeout"]
+
+
