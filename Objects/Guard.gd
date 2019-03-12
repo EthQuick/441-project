@@ -8,6 +8,7 @@ var GRAV = 20
 var dir_change = false
 
 func _ready():
+	add_to_group("Enemies")
 	$Sprite.play("Walk")
 
 func _physics_process(delta):
@@ -27,7 +28,7 @@ func _physics_process(delta):
 		if(not dir_change):
 			direction *= -1
 			dir_change = true
-		$Dir_Timer.start()
+			$Dir_Timer.start()
 	
 	move_and_slide(velocity, UP)
 

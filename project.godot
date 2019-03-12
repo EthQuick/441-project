@@ -14,6 +14,11 @@ config/name="441-Project"
 run/main_scene="res://Worlds/World-1.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/size/width=640
+window/size/height=360
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"
