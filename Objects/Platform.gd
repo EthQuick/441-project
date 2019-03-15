@@ -8,19 +8,31 @@ var GRAV = 20
 var dir_change = false
 var velocity = Vector2()
 var traveled = 0
-
+var cur_speed
+var give_speed
 
 func _ready():
 	add_to_group("Platforms")
+	cur_speed = speed
 
-func _process(delta):
-	velocity.x = speed*direction*delta
-	traveled += velocity.x
-	if(abs(traveled) >= max_distance):
-		direction *= -1
-		traveled = 0
+func _physics_process(delta):
+	velocity.x = cur_speed*direction
+	velocity.y = 0
+	if(is_on_wall()):
+		if(not dir_change):
+			direction *= -1
+			dir_change = true
+			$Dir_Timer.start()
 	
-	set_position(position + velocity)
+	move_and_slide(velocity, UP)
 
 func _on_DirTimer_timeout():
 	dir_change = false
+
+func _on_Area2D_body_entered(body):
+	if(body.get_name() == "Player"):
+		cur_speed = 0
+
+func _on_Area2D_body_exited(body):
+	if(body.get_name() == "Player"):
+		cur_speed = speed
