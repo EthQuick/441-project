@@ -14,10 +14,24 @@ config/name="441-Project"
 run/main_scene="res://Worlds/World-1.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+global="*res://global.gd"
+
 [display]
 
 window/size/width=640
 window/size/height=360
+
+[layer_names]
+
+2d_physics/layer_1="Player"
+2d_physics/layer_2="Guards"
+2d_physics/layer_3="Walls"
+2d_physics/layer_4="Turrets"
+2d_physics/layer_5="Bullets"
+2d_physics/layer_6="Key"
+2d_physics/layer_7="Platforms"
 
 [rendering]
 
