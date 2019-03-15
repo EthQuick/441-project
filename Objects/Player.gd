@@ -5,19 +5,21 @@ var wall_jump = false
 var velocity = Vector2()
 var ACCEL = 50
 var MAX_SPEED = 200
+var MIN_SPEED = 0
 var HEIGHT = -500 #jump height
 var GRAV = 20
 const UP = Vector2(0, -1)
 var UI = 0
+var moving = false
+#platform junk
+var plat = false #for tracking if we are on a platform
+var plat_obj = null #The platform that we are on
 
 #Camera borders
 export (int) var TOP_BORD = 0
 export (int) var LEFT_BORD = 0
 export (int) var RIGHT_BORD = 1280
 export (int) var BOT_BORD = 360
-
-#are we on a platform
-var plat = false
 
 func _ready():
 	#move to the worlds start location node
@@ -34,6 +36,8 @@ func _physics_process(delta):
 	#gravity
 	if(wall):
 		velocity.y = min(velocity.y + GRAV*0.2, 400)
+	elif(plat):
+		velocity.y = min(velocity.y, 0)
 	else:
 		velocity.y = min(velocity.y + GRAV, 400)
 	#left and right motion
@@ -41,15 +45,18 @@ func _physics_process(delta):
 		velocity.x = min(velocity.x + ACCEL, MAX_SPEED)
 		$Sprite.flip_h = false
 		$Sprite.play("Walk")
+		moving = true
 	elif(Input.is_action_pressed("ui_left")):
 		velocity.x = max(velocity.x - ACCEL, -MAX_SPEED)
 		$Sprite.flip_h = true
 		$Sprite.play("Walk")
+		moving = true
 	else:
-		velocity.x = lerp(velocity.x, 0, 0.2)
+		velocity.x = lerp(velocity.x, MIN_SPEED, 0.2)
 		$Sprite.play("Idle")
+		moving = false
 	#jump
-	if(is_on_floor()):
+	if(is_on_floor() or plat):
 		velocity.y == 0
 		if(velocity.x == 0):
 			$Sprite.play("Idle")
@@ -57,6 +64,7 @@ func _physics_process(delta):
 			velocity.y = HEIGHT
 	else:
 		$Sprite.play("Jump")
+
 	#wall jump
 	if(is_on_wall()):
 		if(not is_on_floor()):
@@ -76,28 +84,35 @@ func _physics_process(delta):
 				velocity.x = -400
 			else:
 				velocity.x = 400
-	
-	var floor_v = get_floor_velocity()
-	print(floor_v.x)
-	#if(velocity.x != 0):
-	velocity.x += floor_v.x
-		
-	velocity = move_and_slide(velocity, UP)
-
+		#print(velocity.x)
+	if(plat):
+		MIN_SPEED = plat_obj.speed * plat_obj.direction
+	velocity = move_and_slide(velocity, UP) #when colliding with the floor x is set to 0 it seems
 func _on_Area2D_body_entered(body):
 	#TODO: actually go back to the title screen
-	if(body.collision_mask == 3):
+	if("Guard" in body.get_name()):
 		UI[0].set_message("Game Over")
 		get_tree().paused = true
-	elif(body.collision_mask == 6):
-		plat = true
-
-func _on_Area2D_body_exited(body):
-	if(body.collision_mask == 6):
-		plat = false
 
 func _on_WallTimer_timeout():
 	wall_jump = false
 
+func _on_Area2D_area_entered(area):
+	if("Bullet" in area.get_name() or area.get_name() == "KillBox"):
+		UI[0].set_message("Game Over")
+		get_tree().paused = true
+	elif("Key" in area.get_name()):
+		global.player_key += 1
+		area.free()
 
+func _on_Plat_Det_body_entered(body):
+	if("Platform" in body.get_name()):
+		plat = true
+		plat_obj = get_node("../" + body.get_name())
+		MIN_SPEED = body.speed * body.direction
 
+func _on_Plat_Det_body_exited(body):
+	if("Platform" in body.get_name()):
+		plat = false
+		plat_obj = null
+		MIN_SPEED = 0
