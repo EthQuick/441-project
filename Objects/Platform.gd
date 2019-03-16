@@ -2,14 +2,14 @@ extends KinematicBody2D
 
 export (int) var speed = 100
 export (int) var direction = 1 #should only ever be 1 or -1
-export (int) var max_distance = 192
+#export (int) var max_distance = 192
 const UP = Vector2(0, -1)
-var GRAV = 20
+#var GRAV = 20
 var dir_change = false
 var velocity = Vector2()
-var traveled = 0
+#var traveled = 0
 var cur_speed
-var give_speed
+#var give_speed
 
 func _ready():
 	add_to_group("Platforms")

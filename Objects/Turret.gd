@@ -21,6 +21,7 @@ func _ready():
 	$LoS.add_exception(get_node("../TileMap"))
 	$Position2D.position.x = 16*direction
 
+#warning-ignore:unused_argument
 func _physics_process(delta):
 	if($LoS.is_colliding()):
 		target = $LoS.get_collider()

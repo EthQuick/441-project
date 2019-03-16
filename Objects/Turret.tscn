@@ -4,59 +4,35 @@
 [ext_resource path="res://Sprites/Player/Player_right.png" type="Texture" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-
-custom_solver_bias = 0.0
 extents = Vector2( 16.1738, 16.2068 )
 
 [node name="Turret" type="StaticBody2D"]
-
 position = Vector2( 32, 32 )
-input_pickable = false
 collision_layer = 8
 collision_mask = 0
-constant_linear_velocity = Vector2( 0, 0 )
-constant_angular_velocity = 0.0
-friction = 1.0
-bounce = 0.0
 script = ExtResource( 1 )
-_sections_unfolded = [ "Collision", "Transform" ]
 __meta__ = {
 "_edit_group_": true
 }
-direction = 1
 aimx = -32
-aimy = 0
 
-[node name="Sprite" type="Sprite" parent="." index="0"]
-
+[node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1"]
-
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
-_sections_unfolded = [ "Transform" ]
 
-[node name="LoS" type="RayCast2D" parent="." index="2"]
-
+[node name="LoS" type="RayCast2D" parent="."]
 enabled = true
-exclude_parent = true
-cast_to = Vector2( 0, 50 )
-collision_mask = 1
+collide_with_areas = true
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="AimTimer" type="Timer" parent="." index="3"]
-
-process_mode = 1
+[node name="AimTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
-autostart = false
 
-[node name="Position2D" type="Position2D" parent="." index="4"]
-
-_sections_unfolded = [ "Transform" ]
+[node name="Position2D" type="Position2D" parent="."]
 
 [connection signal="timeout" from="AimTimer" to="." method="_on_AimTimer_timeout"]
-
-

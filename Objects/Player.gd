@@ -32,14 +32,15 @@ func _ready():
 	UI = get_tree().get_nodes_in_group("UI")
 	pass
 
+#warning-ignore:unused_argument
 func _physics_process(delta):
 	#gravity
 	if(wall):
 		velocity.y = min(velocity.y + GRAV*0.2, 400)
-	elif(plat):
-		velocity.y = min(velocity.y, 0)
 	else:
 		velocity.y = min(velocity.y + GRAV, 400)
+	if(plat):
+		velocity.y = min(velocity.y, 0)
 	#left and right motion
 	if(Input.is_action_pressed("ui_right")):
 		velocity.x = min(velocity.x + ACCEL, MAX_SPEED)
@@ -57,16 +58,22 @@ func _physics_process(delta):
 		moving = false
 	#jump
 	if(is_on_floor() or plat):
-		velocity.y == 0
 		if(velocity.x == 0):
 			$Sprite.play("Idle")
 		if(Input.is_action_just_pressed("ui_up")):
 			velocity.y = HEIGHT
+			$JumpPart.set_emitting(true)
+			$JumpPart.set_one_shot(true)
 	else:
 		$Sprite.play("Jump")
 
 	#wall jump
-	if(is_on_wall()):
+	if(is_on_wall() and moving):
+		var side = wall_side()
+		if(side == "right"):
+			$WallPartRight.emitting = true
+		elif(side == "left"):
+			$WallPartLeft.emitting = true
 		if(not is_on_floor()):
 			$Sprite.play("Wall")
 		if(velocity.y < 0):
@@ -76,6 +83,8 @@ func _physics_process(delta):
 		$WallTimer.start()
 	else:
 		wall = false
+		$WallPartRight.emitting = false
+		$WallPartLeft.emitting = false
 	if(wall_jump):
 		if(Input.is_action_just_pressed("ui_up")):
 			velocity.y = HEIGHT
@@ -88,11 +97,23 @@ func _physics_process(delta):
 	if(plat):
 		MIN_SPEED = plat_obj.speed * plat_obj.direction
 	velocity = move_and_slide(velocity, UP) #when colliding with the floor x is set to 0 it seems
+
 func _on_Area2D_body_entered(body):
 	#TODO: actually go back to the title screen
 	if("Guard" in body.get_name()):
 		UI[0].set_message("Game Over")
 		get_tree().paused = true
+
+func wall_side():
+	#This helper found here:
+	#https://godotengine.org/qa/40689/which-collided-when-using-kinematicbody2d-move_and_slide
+	for i in range(get_slide_count()):
+		var collision = get_slide_collision(i)
+		if collision.normal.x > 0:
+			return "left"
+		elif collision.normal.x < 0:
+			return "right"
+	return "none"
 
 func _on_WallTimer_timeout():
 	wall_jump = false
@@ -100,16 +121,20 @@ func _on_WallTimer_timeout():
 func _on_Area2D_area_entered(area):
 	if("Bullet" in area.get_name() or area.get_name() == "KillBox"):
 		UI[0].set_message("Game Over")
+		if("Bullet" in area.get_name()):
+			area.free()
 		get_tree().paused = true
 	elif("Key" in area.get_name()):
-		global.player_key += 1
-		area.free()
+		area.get_key()
 
 func _on_Plat_Det_body_entered(body):
 	if("Platform" in body.get_name()):
 		plat = true
 		plat_obj = get_node("../" + body.get_name())
 		MIN_SPEED = body.speed * body.direction
+	if("TileMap" in body.get_name()):
+		$GroundPart.set_emitting(true)
+		$GroundPart.set_one_shot(true)
 
 func _on_Plat_Det_body_exited(body):
 	if("Platform" in body.get_name()):

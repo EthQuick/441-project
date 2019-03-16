@@ -1,31 +1,49 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Sprites/Key.png" type="Texture" id=1]
+[ext_resource path="res://Objects/Key.gd" type="Script" id=1]
+[ext_resource path="res://Sprites/Key.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/Key_Part.png" type="Texture" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
-
-custom_solver_bias = 0.0
 radius = 3.70666
 height = 2.69582
 
-[node name="Key" type="Area2D" index="0"]
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0.5176 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.148 ), -0.018118, 0.0, 0, 0 ]
 
-input_pickable = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=2]
+emission_shape = 2
+emission_box_extents = Vector3( 1, 1, 1 )
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 50.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale_curve = SubResource( 4 )
+
+[node name="Key" type="Area2D"]
 collision_layer = 32
-audio_bus_override = false
-audio_bus_name = "Master"
-_sections_unfolded = [ "Collision" ]
+script = ExtResource( 1 )
 
-[node name="Sprite" type="Sprite" parent="." index="0"]
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
 
-texture = ExtResource( 1 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1"]
-
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
+[node name="GrabPart" type="Particles2D" parent="."]
+emitting = false
+amount = 10
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource( 2 )
+texture = ExtResource( 3 )
+
+[node name="PartTimer" type="Timer" parent="."]
+wait_time = 0.5
 
