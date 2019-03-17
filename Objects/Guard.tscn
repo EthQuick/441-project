@@ -1,60 +1,57 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Objects/Guard.gd" type="Script" id=1]
-[ext_resource path="res://Sprites/Player/Player_right.png" type="Texture" id=2]
-[ext_resource path="res://Sprites/Player/Player_fall.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/Guard/Guard_Idle.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/Guard/Guard_Walk_1.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/Guard/Guard_Walk_2.png" type="Texture" id=4]
+[ext_resource path="res://Sprites/Player/Player_fall.png" type="Texture" id=5]
+[ext_resource path="res://Sprites/Guard/Guard_Stun.png" type="Texture" id=6]
 
 [sub_resource type="SpriteFrames" id=1]
-
 animations = [ {
-"frames": [ ExtResource( 2 ) ],
+"frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 2 ), ExtResource( 4 ) ],
 "loop": true,
 "name": "Walk",
-"speed": 5.0
+"speed": 4.0
 }, {
-"frames": [ ExtResource( 3 ) ],
+"frames": [ ExtResource( 5 ) ],
 "loop": true,
 "name": "Fall",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "Stunned",
+"speed": 5.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=2]
-
-custom_solver_bias = 0.0
-extents = Vector2( 16.0914, 15.9929 )
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 13.3299
+height = 3.4106
 
 [node name="Guard" type="KinematicBody2D"]
-
 position = Vector2( 32, 32 )
-input_pickable = false
 collision_layer = 2
 collision_mask = 13
-collision/safe_margin = 0.08
 script = ExtResource( 1 )
-_sections_unfolded = [ "Collision" ]
 __meta__ = {
 "_edit_group_": true
 }
-speed = 100
-direction = 1
 
-[node name="Dir_Timer" type="Timer" parent="." index="0"]
-
-process_mode = 1
+[node name="Dir_Timer" type="Timer" parent="."]
 wait_time = 0.25
 one_shot = true
-autostart = false
 
-[node name="Sprite" type="AnimatedSprite" parent="." index="1"]
-
+[node name="Sprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
 animation = "Walk"
-_sections_unfolded = [ "Transform" ]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
-
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 1 )
 shape = SubResource( 2 )
 
+[node name="Stun_Timer" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="timeout" from="Dir_Timer" to="." method="_on_Dir_Timer_timeout"]
-
-
+[connection signal="timeout" from="Stun_Timer" to="." method="_on_Stun_Timer_timeout"]

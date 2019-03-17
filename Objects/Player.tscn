@@ -1,11 +1,13 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Objects/Player.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/Player/Player.png" type="Texture" id=2]
-[ext_resource path="res://Sprites/Player/Player_fall.png" type="Texture" id=3]
-[ext_resource path="res://Sprites/Player/Player_jump.png" type="Texture" id=4]
-[ext_resource path="res://Sprites/Player/Player_right.png" type="Texture" id=5]
-[ext_resource path="res://Sprites/Particle.png" type="Texture" id=6]
+[ext_resource path="res://Sprites/Player/Player_right_0.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/Player/Player_right_1.png" type="Texture" id=4]
+[ext_resource path="res://Sprites/Player/Player_fall.png" type="Texture" id=5]
+[ext_resource path="res://Sprites/Player/Player_jump.png" type="Texture" id=6]
+[ext_resource path="res://Sprites/Player/Player_Dead.png" type="Texture" id=7]
+[ext_resource path="res://Sprites/Particle.png" type="Texture" id=8]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -14,30 +16,37 @@ animations = [ {
 "name": "Idle",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 3 ) ],
+"frames": [ ExtResource( 3 ), ExtResource( 2 ), ExtResource( 4 ), ExtResource( 2 ) ],
 "loop": true,
-"name": "Wall",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 4 ) ],
-"loop": true,
-"name": "Jump",
+"name": "Walk",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 5 ) ],
 "loop": true,
-"name": "Walk",
+"name": "Wall",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "Jump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": true,
+"name": "Dead",
 "speed": 5.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 20, 20 )
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 16.1847
+height = 4.8516
 
-[sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 20.1957, 20.111 )
+[sub_resource type="CapsuleShape2D" id=3]
+radius = 16.5237
+height = 4.18319
 
 [sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 19.5912, 13.5194 )
+extents = Vector2( 11.6737, 13.5194 )
 
 [sub_resource type="Curve" id=5]
 _data = [ Vector2( 0.00130202, 0.74707 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.00585938 ), 0.0, 0.0, 0, 0 ]
@@ -52,6 +61,7 @@ flag_disable_z = true
 spread = 180.0
 gravity = Vector3( 0, 0, 0 )
 initial_velocity = 50.0
+angular_velocity = 2.12283e+020
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale_curve = SubResource( 6 )
@@ -73,18 +83,15 @@ __meta__ = {
 }
 
 [node name="Body" type="CollisionShape2D" parent="."]
-visible = false
+position = Vector2( -0.184029, 1.28818 )
 shape = SubResource( 2 )
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="PlayerBod" type="Area2D" parent="."]
-visible = false
 input_pickable = false
 collision_mask = 18
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerBod"]
+position = Vector2( 0, 2 )
 shape = SubResource( 3 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -92,8 +99,7 @@ current = true
 drag_margin_v_enabled = false
 
 [node name="Plat_Det" type="Area2D" parent="."]
-visible = false
-collision_mask = 68
+collision_mask = 70
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Plat_Det"]
 position = Vector2( 0, 10 )
@@ -110,7 +116,7 @@ explosiveness = 1.0
 local_coords = false
 draw_order = 1
 process_material = SubResource( 7 )
-texture = ExtResource( 6 )
+texture = ExtResource( 8 )
 
 [node name="JumpPart" type="Particles2D" parent="."]
 position = Vector2( 0, 20 )
@@ -123,7 +129,7 @@ explosiveness = 1.0
 local_coords = false
 draw_order = 1
 process_material = SubResource( 7 )
-texture = ExtResource( 6 )
+texture = ExtResource( 8 )
 
 [node name="WallPartRight" type="Particles2D" parent="."]
 position = Vector2( 20, 0 )
@@ -134,7 +140,7 @@ amount = 25
 lifetime = 0.5
 local_coords = false
 process_material = SubResource( 7 )
-texture = ExtResource( 6 )
+texture = ExtResource( 8 )
 
 [node name="WallPartLeft" type="Particles2D" parent="."]
 position = Vector2( -20, 0 )
@@ -145,7 +151,7 @@ amount = 25
 lifetime = 0.5
 local_coords = false
 process_material = SubResource( 7 )
-texture = ExtResource( 6 )
+texture = ExtResource( 8 )
 
 [connection signal="timeout" from="WallTimer" to="." method="_on_WallTimer_timeout"]
 [connection signal="area_entered" from="PlayerBod" to="." method="_on_Area2D_area_entered"]

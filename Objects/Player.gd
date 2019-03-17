@@ -14,6 +14,8 @@ var moving = false
 #platform junk
 var plat = false #for tracking if we are on a platform
 var plat_obj = null #The platform that we are on
+#are we on top of the guard
+var guard = false
 
 #Camera borders
 export (int) var TOP_BORD = 0
@@ -99,10 +101,14 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity, UP) #when colliding with the floor x is set to 0 it seems
 
 func _on_Area2D_body_entered(body):
-	#TODO: actually go back to the title screen
 	if("Guard" in body.get_name()):
-		UI[0].set_message("Game Over")
-		get_tree().paused = true
+		if(guard):
+			velocity.y = HEIGHT
+			body.stun()
+		else:
+			$Sprite.play("Dead")
+			get_tree().paused = true
+			UI[0].game_over("Game Over")
 
 func wall_side():
 	#This helper found here:
@@ -120,12 +126,16 @@ func _on_WallTimer_timeout():
 
 func _on_Area2D_area_entered(area):
 	if("Bullet" in area.get_name() or area.get_name() == "KillBox"):
-		UI[0].set_message("Game Over")
 		if("Bullet" in area.get_name()):
 			area.free()
+		$Sprite.play("Dead")
 		get_tree().paused = true
+		UI[0].game_over("Game Over")
 	elif("Key" in area.get_name()):
 		area.get_key()
+	elif("StageEnd" in area.get_name()):
+		get_tree().paused = true
+		UI[0].game_over("World Clear!")
 
 func _on_Plat_Det_body_entered(body):
 	if("Platform" in body.get_name()):
@@ -135,9 +145,13 @@ func _on_Plat_Det_body_entered(body):
 	if("TileMap" in body.get_name()):
 		$GroundPart.set_emitting(true)
 		$GroundPart.set_one_shot(true)
+	if("Guard" in body.get_name()):
+		guard = true
 
 func _on_Plat_Det_body_exited(body):
 	if("Platform" in body.get_name()):
 		plat = false
 		plat_obj = null
 		MIN_SPEED = 0
+	if("Guard" in body.get_name()):
+		guard = false
