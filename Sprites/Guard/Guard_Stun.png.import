@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Player_jump.png-5ab18aa6331e7cdcf05f6b29994c5283.stex"
+path="res://.import/Guard_Stun.png-eb8193801eb8196f16e8cb6e336eb191.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Player/Player_jump.png"
-dest_files=[ "res://.import/Player_jump.png-5ab18aa6331e7cdcf05f6b29994c5283.stex" ]
+source_file="res://Sprites/Guard/Guard_Stun.png"
+dest_files=[ "res://.import/Guard_Stun.png-eb8193801eb8196f16e8cb6e336eb191.stex" ]
 
 [params]
 
