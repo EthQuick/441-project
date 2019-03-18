@@ -1,5 +1,9 @@
 extends KinematicBody2D
 
+#The basic movement used here is from this tutorial series:
+#https://www.youtube.com/playlist?list=PL9FzW-m48fn2jlBu_0DRh7PvAt-GULEmd
+#However I have modified it quite a bit to add in things like Wall Jumping
+
 var wall = false
 var wall_jump = false
 var velocity = Vector2()

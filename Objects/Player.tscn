@@ -2,10 +2,10 @@
 
 [ext_resource path="res://Objects/Player.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/Player/Player.png" type="Texture" id=2]
-[ext_resource path="res://Sprites/Player/Player_fall.png" type="Texture" id=3]
-[ext_resource path="res://Sprites/Player/Player_Dead.png" type="Texture" id=4]
-[ext_resource path="res://Sprites/Player/Player_right_0.png" type="Texture" id=5]
-[ext_resource path="res://Sprites/Player/Player_right_1.png" type="Texture" id=6]
+[ext_resource path="res://Sprites/Player/Player_right_0.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/Player/Player_right_1.png" type="Texture" id=4]
+[ext_resource path="res://Sprites/Player/Player_Dead.png" type="Texture" id=5]
+[ext_resource path="res://Sprites/Player/Player_fall.png" type="Texture" id=6]
 [ext_resource path="res://Sprites/Player/Player_jump.png" type="Texture" id=7]
 [ext_resource path="res://Sprites/Particle.png" type="Texture" id=8]
 
@@ -16,19 +16,19 @@ animations = [ {
 "name": "Idle",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 3 ) ],
+"frames": [ ExtResource( 3 ), ExtResource( 2 ), ExtResource( 4 ), ExtResource( 2 ) ],
 "loop": true,
-"name": "Wall",
+"name": "Walk",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 4 ) ],
+"frames": [ ExtResource( 5 ) ],
 "loop": true,
 "name": "Dead",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 5 ), ExtResource( 2 ), ExtResource( 6 ), ExtResource( 2 ) ],
+"frames": [ ExtResource( 6 ) ],
 "loop": true,
-"name": "Walk",
+"name": "Wall",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 7 ) ],
