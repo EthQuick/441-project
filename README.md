@@ -5,7 +5,5 @@ TODO:
 * ~~Make the walls into a tileset~~
 * ~~Make basic enemy that walks back and forth~~
 * ~~Make basic moving platform~~
-* Add player attack
-* Add better sprites
-* Make switches
-* Other stuff to make it better
+* ~~Add better sprites~~
+* ~~Other stuff to make it better~~
